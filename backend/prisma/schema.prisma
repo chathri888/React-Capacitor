@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Expense {
+  id        Int      @id @default(autoincrement())
+  title     String
+  amount    Float
+  category  String
+  date      String
+  type      String   @default("EXPENSE")
+  unit      String   @default("₹")
+  createdAt DateTime @default(now())
+}
+
+model Form {
+  id        Int         @id @default(autoincrement())
+  name      String
+  fields    String
+  createdAt DateTime    @default(now())
+  entries   FormEntry[]
+}
+
+model FormEntry {
+  id        Int      @id @default(autoincrement())
+  formId    Int
+  data      String
+  date      String
+  createdAt DateTime @default(now())
+  form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+}
