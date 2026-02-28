@@ -10,18 +10,14 @@ import ReportsPage from './components/ReportsPage';
 import Dashboard from './components/Dashboard';
 import ConfirmModal from './components/ConfirmModal';
 
-// Android uses machine IP; browser uses localhost
-// Using LocalTunnel for maximum reliability (bypasses firewalls)
-// Logcat will show the URL being used
+// Android uses machine IP; browser uses env var or localhost
 const GET_API_URL = () => {
   if (Capacitor.getPlatform() === 'android') {
-    // If you are using an EMULATOR, use 10.0.2.2
-    // If you are using a PHYSICAL DEVICE, use your machine's IP (e.g., 192.168.1.15)
     const machineIp = '192.168.1.15';
-    console.log(`[Android] Attempting connection via ${machineIp} and fallback 10.0.2.2`);
-    return `http://${machineIp}:5000`; // Primary choice
+    console.log(`[Android] Attempting connection via ${machineIp}`);
+    return `http://${machineIp}:5000`;
   }
-  return 'http://localhost:5000';
+  return process.env.REACT_APP_API_URL || 'http://localhost:5000';
 };
 
 const API_URL = GET_API_URL();
